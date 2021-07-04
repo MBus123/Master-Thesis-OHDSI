@@ -1,0 +1,19 @@
+*application.properties
+.idea/
+.metadata/
+*.iml
+sandbox/
+/target/
+.settings
+.classpath
+.project
+/nb-configuration.xml
+/nbactions*.xml
+*~
+.DS_Store
+
+### Developer's personal properties ###
+**/resources/config/application*-dev-*.properties
+**/resources/config/application*-dev-*.yaml
+**/resources/config/application*-dev-*.yml
+/.vscode

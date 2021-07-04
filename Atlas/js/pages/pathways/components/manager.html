@@ -1,0 +1,70 @@
+<loading data-bind="css: classes('loading-panel'), visible: $component.loading" params="status: 'Loading Cohort Pathway Analysis...'"></loading>
+
+<!-- ko if: design -->
+<div data-bind="css: classes(), visible: !$component.loading()">
+	<heading-title params="name: pathwayCaption(), description: canEdit() ? '' : '(Read only)', icon: 'sitemap', theme: 'dark'"></heading-title>
+	<!-- ko if: !!design() && !!design().id -->
+	<!-- ko component: {name: 'authorship', params: getAuthorship()} --> <!-- /ko -->
+<!-- /ko -->
+	<div class="asset-heading">
+		<div class="input-group">
+			<input type="text" placeholder="New Cohort Pathway" class="form-control" data-bind="attr: { disabled: $component.canEdit() ? null : true }, textInput: design().name, css: {emptyInput: !isNameFilled()}" />
+			<div class="input-group-btn">
+				<button type="button" class="btn btn-success" data-bind="click: $component.save, css: {disabled:!canSave() || isProcessing()}"><i class="fa fa-save"></i></button>
+				<button type="button" class="btn btn-primary" data-bind="click: $component.close, css: {disabled: isProcessing()}"><i class="fa fa-times"></i></button>
+				<!-- ko ifnot: isNewEntity -->
+				<button type="button" class="btn btn-primary" data-bind="click: copyPathway, css: {disabled: !$component.canCopy() || isProcessing()}" title="Create a copy of this Pathway Analysis"><i class="fa fa-copy"></i></button>
+				<button class="btn btn-primary" title="Configure access" data-bind="visible: isOwner, click: () => isAccessModalShown(!isAccessModalShown())">
+                    <i class="fa fa-lock"></i>
+                </button>
+				<button type="button" class="btn btn-danger" data-bind="click: $component.del, css: {disabled: !canDelete() || isProcessing()}"><i class="fa fa-trash-o"></i></button>
+				<!-- /ko -->
+			</div>
+		</div>
+		<name-validation params="hasEmptyName: !isNameFilled(), hasInvalidCharacters: isNameFilled() && !isNameCharactersValid(), 
+                                 hasInvalidLength: isNameFilled() && !isNameLengthValid(), hasDefaultName: isDefaultName()"></name-validation>
+	</div>
+
+	<tabs data-bind="visible: !$component.loading()" params="
+		selectedTabKey: $component.selectedTabKey,
+		selectTab: $component.selectTab,
+		tabs: [
+			{
+				title: 'Design',
+				key: 'design',
+				componentName: 'pathway-design',
+				componentParams: $component.componentParams
+			},
+			{
+				title: 'Executions',
+				key: 'executions',
+				componentName: 'pathway-exec-wrapper',
+				componentParams: $component.componentParams
+			},
+			{
+				title: 'Utilities',
+				key: 'utilities',
+				componentName: 'pathway-utils',
+				componentParams: $component.componentParams,
+			},
+            {
+                title: 'Messages', 
+                key: 'messages',
+                componentName: 'warnings',
+                componentParams: $component.warningParams,
+				hasBadge: true,
+				preload: true,
+            },
+		]">
+	</tabs>
+</div>
+<!-- /ko -->
+
+<configure-access-modal params="
+	isModalShown: $component.isAccessModalShown,
+	isOwnerFn: $component.isOwnerFn,
+	loadAccessListFn: $component.loadAccessList,
+	grantAccessFn: $component.grantAccess,
+	revokeAccessFn: $component.revokeAccess,
+	loadRoleSuggestionsFn: $component.loadAccessRoleSuggestions
+"></configure-access-modal>

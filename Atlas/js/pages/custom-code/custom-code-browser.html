@@ -1,0 +1,19 @@
+<heading-title params="name: 'Custom Code', theme: 'dark'"></heading-title>
+
+<div data-bind="css: classes({ extra: 'paddedWrapper flexed' })">
+	<span data-bind="click: newCustomCode, css: classes({
+		element: 'new-btn',
+		extra: `pull-right btn btn-sm btn-primary}`,
+	})">New Custom Algorithm</span>
+
+	<span data-bind="click: download, css: classes({
+		element: 'new-btn',
+		extra: `pull-right btn btn-sm btn-primary}`,
+	})">Download Validation</span>
+	
+	<faceted-datatable data-bind="visible: loading()==false" params="order: [[4, 'desc']], reference: reference, columns: columns, options: options"></faceted-datatable>
+
+	<loading data-bind="visible:loading()" params="status: 'retrieving predictions'"></loading>
+</div> 
+
+<access-denied params="isAuthenticated: isAuthenticated, isPermitted: hasAccess"></access-denied>

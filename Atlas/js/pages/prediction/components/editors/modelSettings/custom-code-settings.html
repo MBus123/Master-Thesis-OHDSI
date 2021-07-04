@@ -1,0 +1,19 @@
+<loading data-bind="visible:loading()" params="status: 'retrieving custom codes'"></loading>
+
+<label data-bind="visible: loading()==false"></label>
+<div class="input-group">
+    <!--, optionsText: 'name'-->
+    <select class="form-control" data-bind="options: myItems, optionsCaption: 'Please select...', value: modelSettings.selectedItem, event: {change: test}"></select>
+    <!-- ko foreach: currentHyperParameterList -->
+    <!--input class="form-control" type="text" data-bind="value: $data.value"><label data-bind="text: $data.name"></label-->
+        <div>
+            <label data-bind="text: $data.name"></label>
+            <multi-input params="selectedValues: $data.default, defaultValues: $data.default, valueLabel: 'test', selectedValueType: 'float'"></multi-input>    
+        </div>
+    <!-- /ko -->
+</div>
+
+
+
+
+

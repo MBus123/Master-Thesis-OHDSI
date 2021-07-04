@@ -1,0 +1,76 @@
+<loading data-bind="css: classes('loading-panel'), visible: $component.loading()" params="status: 'Loading Cohort Characterization...'"></loading>
+
+<!-- ko if:design -->
+<div data-bind="css: classes()">
+    <heading-title params="name: characterizationCaption(), description: isEditPermitted() ? '' : '(Read only)', icon: 'shopping-cart', theme: 'dark'"></heading-title>
+    <!-- ko if: !!design() && !!design().id -->
+        <!-- ko component: {name: 'authorship', params: getAuthorship()} --> <!-- /ko -->
+    <!-- /ko -->
+    <div class="asset-heading">
+        <div class="input-group">
+            <input type="text" placeholder="New Characterization" class="form-control" data-bind="css: {emptyInput: !isNameFilled()}, attr: { disabled: isEditPermitted() ? null : true }, textInput: design().name" />
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-success" data-bind="click: save, css: {disabled:!isSavePermitted() || isProcessing() }"><i class="fa fa-save"></i></button>
+                <button type="button" class="btn btn-primary" data-bind="click: closeCharacterization, css: {disabled: isProcessing() }"><i class="fa fa-times"></i></button>
+                <!-- ko ifnot: isNewEntity() -->
+                <button type="button" class="btn btn-primary" data-bind="click: copyCc, css: {disabled: !canCopy() || isProcessing() }" title="Create a copy of this cohort characterization"><i class="fa fa-copy"></i></button>
+                <button class="btn btn-primary" title="Configure access" data-bind="visible: isOwner, click: () => isAccessModalShown(!isAccessModalShown())">
+                    <i class="fa fa-lock"></i>
+                </button>
+                <button type="button" class="btn btn-danger"  data-bind="click: deleteCc, css: {disabled: !$component.isDeletePermitted() || isProcessing() }"><i class="fa fa-trash-o"></i></button>
+                <!-- /ko -->
+            </div>
+        </div>
+        <name-validation params="hasEmptyName: !isNameFilled(), hasInvalidCharacters: isNameFilled() && !isNameCharactersValid(), 
+                                 hasInvalidLength: isNameFilled() && !isNameLengthValid(), hasDefaultName: isDefaultName()"></name-validation>
+    </div>
+
+    <tabs data-bind="visible: !$component.loading()" params="
+        selectedTabKey: $component.selectedTabKey,
+        selectTab: $component.selectTab,
+        tabs: [
+            {
+                title: 'Design',
+                key: 'design',
+                componentName: 'characterization-design',
+                componentParams: $component.componentParams,
+            },
+            {
+                title: 'Concept Sets',
+                key: 'conceptsets',
+                componentName: 'characterization-conceptsets',
+                componentParams: $component.componentParams,
+            },
+            {
+                title: 'Executions',
+                key: 'executions',
+                componentName: 'characterization-exec-wrapper',
+                componentParams: $component.componentParams,
+            },
+            {
+                title: 'Utilities',
+                key: 'utilities',
+                componentName: 'characterization-view-edit-utils',
+                componentParams: $component.componentParams,
+            },
+            {
+                title: 'Messages', 
+                key: 'messages',
+                componentName: 'warnings',
+                componentParams: $component.warningParams,
+                hasBadge: true,
+                preload: true,
+            },
+        ]">
+    </tabs>
+</div>
+<!-- /ko -->
+
+<configure-access-modal params="
+	isModalShown: $component.isAccessModalShown,
+	isOwnerFn: $component.isOwnerFn,
+	loadAccessListFn: $component.loadAccessList,
+	grantAccessFn: $component.grantAccess,
+	revokeAccessFn: $component.revokeAccess,
+	loadRoleSuggestionsFn: $component.loadAccessRoleSuggestions
+"></configure-access-modal>
